@@ -1,11 +1,11 @@
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
 local Window = Rayfield:CreateWindow({
-   Name = "Roblox Menu",
+   Name = "Roblox Menu | gg/BTZKkNjdWd",
    Icon = "box", 
    LoadingTitle = "Roblox Menu is Loading..",
    LoadingSubtitle = "by xqzua03",
-   ShowText = "Rayfield", 
+   ShowText = "Roblox Menu", 
    Theme = "Default", 
 
    ToggleUIKeybind = "K", 
@@ -345,11 +345,19 @@ end
     end
 })
 
+local Tab = Window:CreateTab("Dev Messages", "message-square")
+local Section = Tab:CreateSection(" ")
+
+Tab:CreateLabel("hello!")
+Tab:CreateLabel("Don't use Fling all and anti fling, together. Then fling all will not work.")
+
+
+
+
 local Tab = Window:CreateTab("Update Log", "list")
 local Section = Tab:CreateSection(" ")
 
-local Paragrapgh = Tab:CreateParagraph({Title = "Version: 1.2", Content = "Removed Player clicked information. Added Player using script information, in Home Tab. Removed Label for destroy ui, changed name to Close UI Fully. Removed BackPack viewer, in Other Scripts. Updated the Click on Player Information, you will get user display/ userid. Added a Games Tab. Rename the Fly button on Home Tab to Fly [Toggle G] [SLOW]. Added a nofication for script version."})
-Tab:CreateLabel("Dev Message: Don't use Fling all and anti fling, together. Then fling all will not work.")
+local Paragrapgh = Tab:CreateParagraph({Title = "Version: 1.2", Content = "Removed Player clicked information. Added Player using script information, in Home Tab. Removed Label for destroy ui, changed name to Close UI Fully. Removed BackPack viewer, in Other Scripts. Updated the Click on Player Information, you will get user display/ userid. Added a Games Tab. Rename the Fly button on Home Tab to Fly [Toggle G] [SLOW]. Added a nofication for script version. Added a developer chat, so the owner of Roblox Menu can put some messages up there. Changed the title with the discord Link."})
 local Section = Tab:CreateSection(" ")
 
 local Paragrapgh = Tab:CreateParagraph({Title = "Version: 1.1", Content = "Added a update log. Balloon button has a print script now. Added Button Test Dummy, in Other Scripts. Added a health viewer, backpack checker Button. Removed Other Scripts Section. Added a Tab called Other Scripts. Added new button in GUI. Added a new button in FE. Removed FE Grab Part button in FE tab. Removed TP Tool in FE Tab. Removed Welcome Paragrapgh in Home Tab. Added a Player information, that shows you there username, and more. Removed Balloon Button."})
