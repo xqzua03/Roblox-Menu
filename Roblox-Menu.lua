@@ -44,6 +44,13 @@ Rayfield:Notify({
    Image = "bell",
 })
 
+Rayfield:Notify({
+   Title = "Script Version",
+   Content = "1.2",
+   Duration = 3,
+   Image = "bell",
+})
+
 
 local function getExecutorName()
     if identifyexecutor then
@@ -341,7 +348,7 @@ end
 local Tab = Window:CreateTab("Update Log", "list")
 local Section = Tab:CreateSection(" ")
 
-local Paragrapgh = Tab:CreateParagraph({Title = "Version: 1.2", Content = "Removed Player clicked information. Added Player using script information, in Home Tab. Removed Label for destroy ui, changed name to Close UI Fully. Removed BackPack viewer, in Other Scripts. Updated the Click on Player Information, you will get user display/ userid. Added a Games Tab. Rename the Fly button on Home Tab to Fly [Toggle G] [SLOW]."})
+local Paragrapgh = Tab:CreateParagraph({Title = "Version: 1.2", Content = "Removed Player clicked information. Added Player using script information, in Home Tab. Removed Label for destroy ui, changed name to Close UI Fully. Removed BackPack viewer, in Other Scripts. Updated the Click on Player Information, you will get user display/ userid. Added a Games Tab. Rename the Fly button on Home Tab to Fly [Toggle G] [SLOW]. Added a nofication for script version."})
 Tab:CreateLabel("Dev Message: Don't use Fling all and anti fling, together. Then fling all will not work.")
 local Section = Tab:CreateSection(" ")
 
