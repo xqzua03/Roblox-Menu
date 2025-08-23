@@ -348,11 +348,9 @@ end
 local Tab = Window:CreateTab("Dev Messages", "message-square")
 local Section = Tab:CreateSection(" ")
 
+Tab:CreateLabel("I worked very hard on this 💪")
 Tab:CreateLabel("hello!")
 Tab:CreateLabel("Don't use Fling all and anti fling, together. Then fling all will not work.")
-
-
-
 
 local Tab = Window:CreateTab("Update Log", "list")
 local Section = Tab:CreateSection(" ")
