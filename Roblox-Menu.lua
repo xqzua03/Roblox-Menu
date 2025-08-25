@@ -449,6 +449,17 @@ Tab:CreateSlider({
         speed = Value
     end,
 })
+Tab:CreateSlider({
+   Name = "Gravity",
+   Range = {0, 500}, 
+   Increment = 5,
+   CurrentValue = workspace.Gravity,
+   Flag = "GravitySlider",
+   Callback = function(Value)
+      workspace.Gravity = Value
+   end,
+})
+
 local Section = Tab:CreateSection("Local Player")
 
 local player = game.Players.LocalPlayer
@@ -516,6 +527,57 @@ Tab:CreateButton({
     Callback = function()
         cam.FieldOfView = defaultFOV
     end,
+})
+
+local UserInputService = game:GetService("UserInputService")
+local Player = game.Players.LocalPlayer
+local Character = Player.Character or Player.CharacterAdded:Wait()
+local HumanoidRootPart = Character:WaitForChild("HumanoidRootPart")
+
+
+getgenv().tpwalkSpeed = 3
+
+Tab:CreateSlider({
+   Name = "TPWalk Speed",
+   Range = {1, 20}, 
+   Increment = 1,
+   CurrentValue = 3,
+   Flag = "TPWalkSpeed",
+   Callback = function(Value)
+      getgenv().tpwalkSpeed = Value
+   end,
+})
+Tab:CreateToggle({
+   Name = "TPWalk",
+   CurrentValue = false,
+   Flag = "TPWalkToggle",
+   Callback = function(Value)
+      getgenv().tpwalking = Value
+
+      if Value then
+         Rayfield:Notify({
+            Title = "TPWalk",
+            Content = "Enabled",
+            Duration = 3
+         })
+         task.spawn(function()
+            while getgenv().tpwalking and task.wait(0.1) do
+               if UserInputService:IsKeyDown(Enum.KeyCode.W)
+               or UserInputService:IsKeyDown(Enum.KeyCode.A)
+               or UserInputService:IsKeyDown(Enum.KeyCode.S)
+               or UserInputService:IsKeyDown(Enum.KeyCode.D) then
+                  HumanoidRootPart.CFrame = HumanoidRootPart.CFrame + HumanoidRootPart.CFrame.LookVector * getgenv().tpwalkSpeed
+               end
+            end
+         end)
+      else
+         Rayfield:Notify({
+            Title = "TPWalk",
+            Content = "Disabled",
+            Duration = 3
+         })
+      end
+   end,
 })
 
 local Tab = Window:CreateTab("Games", "play")
