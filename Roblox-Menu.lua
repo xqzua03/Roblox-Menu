@@ -1,3 +1,5 @@
+local Players = game:GetService("Players")
+
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
 local Window = Rayfield:CreateWindow({
@@ -753,5 +755,114 @@ Tab:CreateButton({
    Name = "Feedback UI",
    Callback = function()
     loadstring(game:HttpGet("https://raw.githubusercontent.com/xqzua03/feedback/main/feedback.lua"))()
+   end
+})
+
+local Section = Tab:CreateSection("Username Type")
+local InfoLabel = Tab:CreateParagraph({
+   Title = "Player Info",
+   Content = "Enter a username or display name above."
+})
+
+
+local MIN_PARTIAL = 3
+
+local function trim(s)
+   return tostring(s):match("^%s*(.-)%s*$")
+end
+
+
+local function findMatches(input)
+   input = trim(input)
+   if input == "" then return nil, {} end
+   local lowerInput = string.lower(input)
+
+   local exactMatch = nil
+   local prefixMatches = {}
+
+   for _, player in ipairs(Players:GetPlayers()) do
+      local nameLower = string.lower(player.Name or "")
+      local dispLower = string.lower(player.DisplayName or "")
+
+      
+      if nameLower == lowerInput or dispLower == lowerInput then
+         exactMatch = player
+         break
+      end
+
+      
+      if #lowerInput >= MIN_PARTIAL then
+         if string.sub(nameLower, 1, #lowerInput) == lowerInput
+         or string.sub(dispLower, 1, #lowerInput) == lowerInput then
+            table.insert(prefixMatches, player)
+         end
+      end
+   end
+
+   return exactMatch, prefixMatches
+end
+
+
+local function showPlayerInfo(player)
+   if not player then return end
+   local teamName = (player.Team and player.Team.Name) or "No Team"
+   InfoLabel:Set({
+      Title = "Player Info",
+      Content = string.format(
+         "Username: %s\nDisplay: %s\nUserId: %s\nTeam: %s",
+         player.Name,
+         player.DisplayName,
+         player.UserId,
+         teamName
+      )
+   })
+end
+
+
+Tab:CreateInput({
+   Name = "Enter Username or Display",
+   PlaceholderText = "Type a username or display name",
+   RemoveTextAfterFocusLost = false,
+   Callback = function(text)
+      local exact, matches = findMatches(text)
+
+      if exact then
+         showPlayerInfo(exact)
+         return
+      end
+
+      local trimmed = trim(text)
+      if trimmed == "" then
+         InfoLabel:Set({ Title = "Player Info", Content = "Enter a username or display name above." })
+         return
+      end
+
+      if #trimmed < MIN_PARTIAL then
+         InfoLabel:Set({
+            Title = "Player Info",
+            Content = ("No exact match. Type at least %d characters to search by prefix."):format(MIN_PARTIAL)
+         })
+         return
+      end
+
+      if #matches == 1 then
+         showPlayerInfo(matches[1])
+         return
+      elseif #matches > 1 then
+         
+         local list = {}
+         for i, p in ipairs(matches) do
+            table.insert(list, ("%s (%s)"):format(p.Name, p.DisplayName))
+            if i >= 10 then break end 
+         end
+         InfoLabel:Set({
+            Title = "Player Info",
+            Content = ("Multiple matches found:\n%s\nType more characters to narrow it down.")
+                      :format(table.concat(list, ", "))
+         })
+         return
+      else
+         InfoLabel:Set({ Title = "Player Info", Content = "Player not found in the server." })
+      end
    end
 })
