@@ -312,6 +312,13 @@ Tab:CreateButton({
    end
 })
 
+Tab:CreateButton({
+   Name = "small Hitbox Expander (work in most games)",
+   Callback = function()
+    loadstring(game:HttpGet("https://pastebin.com/raw/ZhLNQwpg"))()
+   end
+})
+
 local Tab = Window:CreateTab("Extra", "album")
 Tab:CreateButton({
    Name = "Anti Ban",
@@ -371,6 +378,23 @@ local Toggle = Tab:CreateToggle({
     CurrentValue = false,
     Flag = "InfZoom",
     Callback = function(Value)
+        if Value then
+            Rayfield:Notify({
+                Title = "Toggle Status",
+                Content = "You toggled ON",
+                Duration = 1,
+                Image = "bell"
+            })
+        else
+            Rayfield:Notify({
+                Title = "Toggle Status",
+                Content = "You toggled OFF",
+                Duration = 1,
+                Image = "bell"
+            })
+        end
+
+
         if Value then
             game:GetService("Players").LocalPlayer.CameraMaxZoomDistance = math.huge
         else
@@ -437,6 +461,9 @@ end
 Tab:CreateButton({
     Name = "Toggle Fly",
     Callback = function()
+
+
+
         toggleFly()
     end,
 })
@@ -560,7 +587,8 @@ Tab:CreateToggle({
          Rayfield:Notify({
             Title = "TPWalk",
             Content = "Enabled",
-            Duration = 3
+            Duration = 3,
+            Image = "bell"
          })
          task.spawn(function()
             while getgenv().tpwalking and task.wait(0.1) do
@@ -576,7 +604,8 @@ Tab:CreateToggle({
          Rayfield:Notify({
             Title = "TPWalk",
             Content = "Disabled",
-            Duration = 3
+            Duration = 3,
+            Image = "bell"
          })
       end
    end,
