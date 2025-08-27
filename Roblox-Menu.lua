@@ -7,7 +7,6 @@ local Window = Rayfield:CreateWindow({
    Icon = "box", 
    LoadingTitle = "Roblox Menu is Loading..",
    LoadingSubtitle = "By: xqzua03",
-   ShowText = "Rayfield", 
    Theme = "Default", 
 
    ToggleUIKeybind = "K", 
@@ -67,7 +66,7 @@ gameName = gameName or "Unknown Game"
 
 local Tab = Window:CreateTab("Home", "home")
 local Section = Tab:CreateSection("Information")
-local Paragrapgh = Tab:CreateParagraph({Title = "Version: 1.3", Content = "Roblox Menu Version is 1.3"})
+local Paragrapgh = Tab:CreateParagraph({Title = "Version: 1.4", Content = "Roblox Menu Version is 1.4"})
 
 Tab:CreateLabel("Executor: " .. getExecutorName())
 Tab:CreateLabel("Game: " .. gameName)
@@ -498,28 +497,34 @@ local hum = char:WaitForChild("Humanoid")
 local defaultWalkSpeed = 16
 local defaultJumpPower = 50
 
-Tab:CreateSlider({
+Tab:CreateInput({
     Name = "WalkSpeed",
-    Range = {16, 200},
-    Increment = 1,
-    Suffix = "WS",
-    CurrentValue = hum.WalkSpeed,
-    Flag = "WalkSpeed",
-    Callback = function(Value)
-        hum.WalkSpeed = Value
-    end,
+    PlaceholderText = "Type a number",
+    RemoveTextAfterFocusLost = false,
+    Callback = function(value)
+        local ws = tonumber(value) or defaultWalkSpeed
+        hum.WalkSpeed = ws
+        Rayfield:Notify({
+            Title = "WalkSpeed Changed",
+            Content = "WalkSpeed set to "..ws,
+            Duration = 3
+        })
+    end
 })
-Tab:CreateSlider({
-    Name = "Jump Power",
-    Range = {50, 500},
-    Increment = 5,
-    Suffix = "JP",
-    CurrentValue = hum.UseJumpPower and hum.JumpPower or defaultJumpPower,
-    Flag = "JumpPower",
-    Callback = function(Value)
+Tab:CreateInput({
+    Name = "JumpPower",
+    PlaceholderText = "Type a number",
+    RemoveTextAfterFocusLost = false,
+    Callback = function(value)
+        local jp = tonumber(value) or defaultJumpPower
         hum.UseJumpPower = true
-        hum.JumpPower = Value
-    end,
+        hum.JumpPower = jp
+        Rayfield:Notify({
+            Title = "JumpPower Changed",
+            Content = "JumpPower set to "..jp,
+            Duration = 3
+        })
+    end
 })
 Tab:CreateButton({
     Name = "Reset WalkSpeed & JumpPower",
@@ -562,7 +567,6 @@ local UserInputService = game:GetService("UserInputService")
 local Player = game.Players.LocalPlayer
 local Character = Player.Character or Player.CharacterAdded:Wait()
 local HumanoidRootPart = Character:WaitForChild("HumanoidRootPart")
-
 
 getgenv().tpwalkSpeed = 3
 
@@ -735,58 +739,7 @@ Tab:CreateButton({
    end
 })
 
-local Tab = Window:CreateTab("Settings", "settings")
-local Section = Tab:CreateSection("User Info")
-
-local player = game.Players.LocalPlayer
-local username = player.Name
-local displayName = player.DisplayName
-local userId = player.UserId
-
-Tab:CreateLabel("Username: " .. username)
-Tab:CreateLabel("Display Name: " .. displayName)
-Tab:CreateLabel("User ID: " .. userId)
-
-local Section = Tab:CreateSection("Roblox Menu Settings")
-Tab:CreateButton({
-    Name = "Close UI",
-    Callback = function()
-        Rayfield:Destroy()
-    end
-})
-
-
-local textToCopy = "https://discord.gg/BTZKkNjdWd"
-
-Tab:CreateButton({
-    Name = "Copy Discord",
-    Callback = function()
-        if setclipboard then
-            setclipboard(textToCopy)
-            -- Rayfield notification
-            Rayfield:Notify({
-                Title = "Notification",
-                Content = "discord link has been copied.",
-                Duration = 1,
-                Image = "bell"
-            })
-        else
-            Rayfield:Notify({
-                Title = "Notification",
-                Content = "Your executor does not support clipboard.",
-                Duration = 2,
-                Image = "bell"
-            })
-        end
-    end,
-})
-Tab:CreateButton({
-   Name = "Feedback UI",
-   Callback = function()
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/xqzua03/feedback/main/feedback.lua"))()
-   end
-})
-
+local Tab = Window:CreateTab("Tools", "hammer")
 local Section = Tab:CreateSection("Username Type")
 local InfoLabel = Tab:CreateParagraph({
    Title = "Player Info",
@@ -894,4 +847,255 @@ Tab:CreateInput({
          InfoLabel:Set({ Title = "Player Info", Content = "Player not found in the server." })
       end
    end
+})
+
+Tab:CreateSection("User IDs")
+
+local Paragraph 
+
+
+local function buildUserIdList()
+    local lines = {}
+    for _, plr in ipairs(Players:GetPlayers()) do
+        table.insert(lines, string.format("%s (@%s): %d", plr.DisplayName, plr.Name, plr.UserId))
+    end
+    if #lines == 0 then
+        return "No players found."
+    end
+    return table.concat(lines, "\n")
+end
+
+
+local function setParagraph(text)
+    if Paragraph and Paragraph.Set then
+        local ok = pcall(function()
+            Paragraph:Set({ Title = "Server User IDs", Content = text })
+        end)
+        if not ok then
+            pcall(function()
+                Paragraph:Set(text)
+            end)
+        end
+    else
+        Paragraph = Tab:CreateParagraph({ Title = "Server User IDs", Content = text })
+    end
+end
+
+
+Tab:CreateButton({
+    Name = "Get UserIDs (Whole Server)",
+    Callback = function()
+        local list = buildUserIdList()
+        setParagraph(list)
+        Rayfield:Notify({
+            Title = "User IDs Updated",
+            Content = "Listed all current players.",
+            Duration = 2,
+            image = "bell"
+        })
+    end
+})
+Tab:CreateButton({
+    Name = "Clear UserIDs",
+    Callback = function()
+        setParagraph("User ID list cleared.")
+        Rayfield:Notify({
+            Title = "User IDs Cleared",
+            Content = "Paragraph has been reset.",
+            Duration = 2,
+            Image = "bell"
+        })
+    end
+})
+Paragraph = Tab:CreateParagraph({
+    Title = "Server User IDs",
+    Content = "Press the button to list all players' user IDs."
+})
+
+local Section = Tab:CreateSection("Team Checker")
+
+local TeamParagraph
+
+
+local function buildTeamList()
+    local lines = {}
+    for _, plr in ipairs(Players:GetPlayers()) do
+        local teamName = plr.Team and plr.Team.Name or "No Team"
+        table.insert(lines, string.format("%s (@%s) → %s", plr.DisplayName, plr.Name, teamName))
+    end
+    if #lines == 0 then
+        return "No players found."
+    end
+    return table.concat(lines, "\n")
+end
+
+
+local function setTeamParagraph(text)
+    if TeamParagraph and TeamParagraph.Set then
+        local ok = pcall(function()
+            TeamParagraph:Set({ Title = "Server Teams", Content = text })
+        end)
+        if not ok then
+            pcall(function()
+                TeamParagraph:Set(text)
+            end)
+        end
+    else
+        TeamParagraph = Tab:CreateParagraph({ Title = "Server Teams", Content = text })
+    end
+end
+
+
+Tab:CreateButton({
+    Name = "Team Check",
+    Callback = function()
+        setTeamParagraph(buildTeamList())
+        Rayfield:Notify({
+            Title = "Teams Updated",
+            Content = "Listed all current players and their teams.",
+            Duration = 2,
+            image = "bell"
+        })
+    end
+})
+Tab:CreateButton({
+    Name = "Clear Teams",
+    Callback = function()
+        setTeamParagraph("Team list cleared.")
+        Rayfield:Notify({
+            Title = "Teams Cleared",
+            Content = "Paragraph has been reset.",
+            Duration = 2,
+            image = "bell"
+        })
+    end
+})
+TeamParagraph = Tab:CreateParagraph({
+    Title = "Server Teams",
+    Content = "Press 'Team Check' to see all players' teams."
+})
+Tab:CreateSection("Health Monitor")
+
+local HPParagraph 
+
+
+local function buildHPList()
+    local lines = {}
+    for _, plr in ipairs(Players:GetPlayers()) do
+        if plr.Character and plr.Character:FindFirstChild("Humanoid") then
+            local hp = math.floor(plr.Character.Humanoid.Health)
+            local maxHp = math.floor(plr.Character.Humanoid.MaxHealth)
+            table.insert(lines, string.format("%s → %d/%d HP", plr.DisplayName, hp, maxHp))
+        end
+    end
+    if #lines == 0 then
+        return "No players found."
+    end
+    return table.concat(lines, "\n")
+end
+
+
+local function setHPParagraph(text)
+    if HPParagraph and HPParagraph.Set then
+        local ok = pcall(function()
+            HPParagraph:Set({ Title = "Live Player HP", Content = text })
+        end)
+        if not ok then
+            pcall(function()
+                HPParagraph:Set(text)
+            end)
+        end
+    else
+        HPParagraph = Tab:CreateParagraph({ Title = "Live Player HP", Content = text })
+    end
+end
+
+
+HPParagraph = Tab:CreateParagraph({
+    Title = "Live Player HP",
+    Content = "Waiting for updates..."
+})
+
+-- Function to connect a player's Humanoid for live updates
+local function connectPlayerHumanoid(plr)
+    if plr.Character and plr.Character:FindFirstChild("Humanoid") then
+        local humanoid = plr.Character.Humanoid
+        humanoid.HealthChanged:Connect(function()
+            setHPParagraph(buildHPList())
+        end)
+    end
+end
+
+
+for _, plr in ipairs(Players:GetPlayers()) do
+    connectPlayerHumanoid(plr)
+end
+
+
+Players.PlayerAdded:Connect(function(plr)
+    plr.CharacterAdded:Connect(function()
+        connectPlayerHumanoid(plr)
+    end)
+end)
+
+
+setHPParagraph(buildHPList())
+
+local Tab = Window:CreateTab("Settings", "settings")
+local Section = Tab:CreateSection("User Info")
+
+local player = game.Players.LocalPlayer
+local username = player.Name
+local displayName = player.DisplayName
+local userId = player.UserId
+
+Tab:CreateLabel("Username: " .. username)
+Tab:CreateLabel("Display Name: " .. displayName)
+Tab:CreateLabel("User ID: " .. userId)
+
+local Section = Tab:CreateSection("Roblox Menu Settings")
+Tab:CreateButton({
+    Name = "Close UI",
+    Callback = function()
+        Rayfield:Destroy()
+    end
+})
+
+
+local textToCopy = "https://discord.gg/BTZKkNjdWd"
+
+Tab:CreateButton({
+    Name = "Copy Discord",
+    Callback = function()
+        if setclipboard then
+            setclipboard(textToCopy)
+            -- Rayfield notification
+            Rayfield:Notify({
+                Title = "Notification",
+                Content = "discord link has been copied.",
+                Duration = 1,
+                Image = "bell"
+            })
+        else
+            Rayfield:Notify({
+                Title = "Notification",
+                Content = "Your executor does not support clipboard.",
+                Duration = 2,
+                Image = "bell"
+            })
+        end
+    end,
+})
+Tab:CreateButton({
+   Name = "Feedback UI",
+   Callback = function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/xqzua03/feedback/main/feedback.lua"))()
+   end
+})
+
+Tab:CreateButton({
+    Name = "reload Roblox Menu",
+    Callback = function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/xqzua03/Roblox-Menu/main/Roblox-Menu.lua"))()
+    end
 })
