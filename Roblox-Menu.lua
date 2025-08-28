@@ -177,6 +177,12 @@ Tab:CreateButton({
         ts:TeleportToPlaceInstance(game.PlaceId, game.JobId, p)
     end,
 })
+Tab:CreateButton({
+   Name = "ESP [E]",
+   Callback = function()
+    loadstring(game:HttpGet("https://pastebin.com/raw/BRgeWVVE"))()
+   end
+})
 
 local Tab = Window:CreateTab("Fe", "eye")
 local Section = Tab:CreateSection("Info")
