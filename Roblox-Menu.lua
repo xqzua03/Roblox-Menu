@@ -235,7 +235,7 @@ Tab:CreateButton({
 local Tab = Window:CreateTab("Universal Scripts", "align-left")
 local Section = Tab:CreateSection("Info")
 Tab:CreateLabel("All scripts are tested.")
-local Section = Tab:CreateSection("Universal Scripts")
+local Section = Tab:CreateSection("aimlock")
 
 Tab:CreateButton({
    Name = "PasteWare",
@@ -257,6 +257,14 @@ Tab:CreateButton({
     loadstring(game:HttpGet("https://raw.githubusercontent.com/meowinc-owner/scripts/refs/heads/main/Universal"))()
    end
 })
+Tab:CreateButton({
+   Name = "AzureModded",
+   Callback = function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/Actyrn/Scripts/main/AzureModded"))()
+   end
+})
+
+local Section = Tab:CreateSection("Universal Scripts")
 Tab:CreateButton({
    Name = "UNION HUB",
    Callback = function()
@@ -491,6 +499,46 @@ Tab:CreateSlider({
    Flag = "GravitySlider",
    Callback = function(Value)
       workspace.Gravity = Value
+   end,
+})
+local Section = Tab:CreateSection("Music")
+
+local musicSound
+
+Tab:CreateButton({
+   Name = "Stop Music",
+   Callback = function()
+      if musicSound and musicSound.IsPlaying then
+         musicSound:Stop()
+      end
+   end,
+})
+Tab:CreateButton({
+   Name = "Moonlight Edited",
+   Callback = function()
+      if musicSound and musicSound.IsPlaying then
+         musicSound:Stop()
+      end
+      musicSound = Instance.new("Sound")
+      musicSound.SoundId = "rbxassetid://122389825417820"
+      musicSound.Volume = 3
+      musicSound.Looped = true
+      musicSound.Parent = game:GetService("SoundService")
+      musicSound:Play()
+   end,
+})
+Tab:CreateButton({
+   Name = "I love you so much Edited",
+   Callback = function()
+      if musicSound and musicSound.IsPlaying then
+         musicSound:Stop()
+      end
+      musicSound = Instance.new("Sound")
+      musicSound.SoundId = "rbxassetid://100697759026652"
+      musicSound.Volume = 3
+      musicSound.Looped = true
+      musicSound.Parent = game:GetService("SoundService")
+      musicSound:Play()
    end,
 })
 
@@ -744,6 +792,39 @@ Tab:CreateButton({
     loadstring(game:HttpGet("https://raw.githubusercontent.com/Zynox-Dev/Legends-Of-Speed-script/refs/heads/main/Script.lua"))()
    end
 })
+local Section = Tab:CreateSection("Da Hood")
+Tab:CreateButton({
+   Name = "Fake Macro [Q]",
+   Callback = function()
+    loadstring(game:HttpGet("https://pastebin.com/raw/QW5Whap9"))()
+   end
+})
+Tab:CreateButton({
+   Name = "TBO",
+   Callback = function()
+    loadstring(game:HttpGet('https://raw.githubusercontent.com/cool5013/TBO/main/TBOscript'))()
+   end
+})
+Tab:CreateButton({
+   Name = "Visoin Hub",
+   Callback = function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/7hbl/lqmc-da-hood/main/lqmc%20da%20hood"))();
+   end
+})
+Tab:CreateButton({
+   Name = "Vortex",
+   Callback = function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/ImagineProUser/vortexdahood/main/vortex", true))()
+   end
+})
+local Section = Tab:CreateSection("Build a Boat")
+Tab:CreateButton({
+   Name = "AutoFarm",
+   Callback = function()
+    loadstring(game:HttpGet("https://scriptblox.com/raw/Build-A-Boat-For-Treasure-utoFrm-Gold-13684"))()
+   end
+})
+
 
 local Tab = Window:CreateTab("Tools", "hammer")
 local Section = Tab:CreateSection("Username Type")
@@ -1022,7 +1103,7 @@ HPParagraph = Tab:CreateParagraph({
     Content = "Waiting for updates..."
 })
 
--- Function to connect a player's Humanoid for live updates
+
 local function connectPlayerHumanoid(plr)
     if plr.Character and plr.Character:FindFirstChild("Humanoid") then
         local humanoid = plr.Character.Humanoid
@@ -1075,7 +1156,7 @@ Tab:CreateButton({
     Callback = function()
         if setclipboard then
             setclipboard(textToCopy)
-            -- Rayfield notification
+            
             Rayfield:Notify({
                 Title = "Notification",
                 Content = "discord link has been copied.",
